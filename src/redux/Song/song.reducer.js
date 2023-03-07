@@ -1,4 +1,49 @@
-import {
+import { createSlice } from "@reduxjs/toolkit";
+// import apicall from "../../data/songData";
+// let id = 0;
+const slice = createSlice({
+  name: "SONG",
+  initialState: {
+    songList: [],
+    updating: false,
+    selectedSong: {},
+    searching: false,
+    filteredSongList: [],
+  },
+  reducers: {
+    GET_SONG: (state, action) => {
+      state.songList = action.payload ? action.payload : state.songList;
+    },
+    ADD_SONG: (state, action) => {
+      state.songList.push(action.payload);
+    },
+    DELETE_SONG: (state, action) => {
+      state.songList.filter((song) => song._id !== action.payload._id);
+    },
+    EDITING_SONG: (state, action) => {
+      state.editing = action.payload;
+    },
+    SELECT_SONG: (state, action) => {
+      state.selectedSong = action.payload;
+    },
+    UPDATE_SONG: (state, action) => {
+      const index = state.songList.findIndex(
+        (song) => song.id === action.payload[1]
+      );
+      state.songList[index] = action.payload[0];
+    },
+    SEARCH_SONG: (state, action) => {
+      state.filteredSongList = [action.payload];
+    },
+    SEARCHING_SONG: (state, action) => {
+      state.searching = action.payload;
+    },
+  },
+});
+
+console.log(slice);
+export const {
+  GET_SONG,
   ADD_SONG,
   DELETE_SONG,
   EDITING_SONG,
@@ -6,60 +51,5 @@ import {
   UPDATE_SONG,
   SEARCH_SONG,
   SEARCHING_SONG,
-  GET_SONG,
-} from "./song.types";
-import songData from "../../data/songData";
-// const songData = apicall();
-
-console.log(songData);
-const INITIAL_STATE = {
-  // songList: [],
-  songList: songData,
-  updating: false,
-  selectedSong: {},
-  searching: false,
-  filteredSongList: songData,
-};
-
-const reducer = (state = INITIAL_STATE, action) => {
-  switch (action.type) {
-    case GET_SONG:
-      return Object.assign({}, state, {
-        songList: state.songList.concat(action.payload),
-      });
-    case ADD_SONG:
-      return Object.assign({}, state, {
-        songList: state.songList.concat(action.payload),
-      });
-    case DELETE_SONG:
-      return Object.assign({}, state, {
-        songList: state.songList.filter((song) => song.id !== action.payload),
-      });
-    case EDITING_SONG:
-      return Object.assign({}, state, {
-        editing: action.payload,
-      });
-    case SELECT_SONG:
-      return Object.assign({}, state, {
-        selectedSong: action.payload,
-      });
-    case UPDATE_SONG:
-      return Object.assign({}, state, {
-        songList: state.songList.map((song) =>
-          song.id === action.payload.id ? action.payload : song
-        ),
-      });
-    case SEARCH_SONG:
-      return Object.assign({}, state, {
-        filteredSongList: action.payload,
-      });
-    case SEARCHING_SONG:
-      return Object.assign({}, state, {
-        searching: action.payload,
-      });
-    default:
-      return state;
-  }
-};
-
-export default reducer;
+} = slice.actions;
+export default slice.reducer;

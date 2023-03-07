@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./songs.css";
 import {
-  deleteSong,
-  editingSong,
-  selectSong,
-} from "../../redux/Song/song.actions";
+  DELETE_SONG,
+  EDITING_SONG,
+  GET_SONG,
+  SELECT_SONG,
+} from "../../redux/Song/song.reducer";
 
 const SongsTable = () => {
-  const songs = useSelector((state) => state.song.songList);
   const dispatch = useDispatch();
-
+  useEffect(() => {
+    dispatch(GET_SONG());
+  }, [SongsTable]);
+  const songs = useSelector((state) => state.songList);
+  console.log("songs", songs);
   const editSong = (song) => {
-    dispatch(editingSong(true));
-    dispatch(selectSong(song));
+    dispatch(EDITING_SONG(true));
+    dispatch(SELECT_SONG(song));
   };
 
   return (
@@ -31,9 +35,9 @@ const SongsTable = () => {
         <tbody>
           {songs.length > 0 ? (
             songs.map((song) => {
-              const { id, title, artist, album, genre } = song;
+              const { _id, title, artist, album, genre } = song;
               return (
-                <tr key={id}>
+                <tr key={_id}>
                   <td>{title}</td>
                   <td>{artist}</td>
                   <td>{album}</td>
@@ -47,7 +51,7 @@ const SongsTable = () => {
                     </button>
                     <button
                       className="action-btn"
-                      onClick={() => dispatch(deleteSong(id))}
+                      onClick={() => dispatch(DELETE_SONG(song))}
                     >
                       Delete
                     </button>

@@ -1,10 +1,10 @@
 import React from "react";
-import { searchSong, searchingSong } from "../../redux/Song/song.actions";
+import { SEARCH_SONG, SEARCHING_SONG } from "../../redux/Song/song.reducer";
 import { useDispatch, useSelector } from "react-redux";
 
 const SearchSong = () => {
   const dispatch = useDispatch();
-  const songs = useSelector((state) => state.song.songList);
+  const songs = useSelector((state) => state.songList);
 
   const handleChange = (event) => {
     const { value } = event.target;
@@ -12,11 +12,11 @@ const SearchSong = () => {
       const filteredSongs = songs.filter(
         (song) => song.name.toLowerCase().indexOf(value.toLowerCase()) !== -1
       );
-      dispatch(searchSong(filteredSongs));
-      dispatch(searchingSong(true));
+      dispatch(SEARCH_SONG(filteredSongs));
+      dispatch(SEARCHING_SONG(true));
     } else {
-      dispatch(searchSong(songs));
-      dispatch(searchingSong(false));
+      dispatch(SEARCH_SONG(songs));
+      dispatch(SEARCHING_SONG(false));
     }
   };
 

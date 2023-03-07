@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./AddSong.css";
-import { editingSong, updateSong } from "../../redux/Song/song.actions";
+import { EDITING_SONG, UPDATE_SONG } from "../../redux/Song/song.reducer";
 import { useDispatch, useSelector } from "react-redux";
-
+import { Box, Button } from "rebass";
+import { Label, Input } from "@rebass/forms";
 let selectedSong;
 const UpdateSong = () => {
+  const [photo, setPhoto] = useState();
   const dispatch = useDispatch();
-  selectedSong = useSelector((state) => state.song.selectedSong);
+  selectedSong = useSelector((state) => state.selectedSong);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,11 +19,21 @@ const UpdateSong = () => {
     event.preventDefault();
     const clickedBtnName = event.nativeEvent.submitter.name;
     if (clickedBtnName === "cancel") {
-      dispatch(editingSong(false));
+      dispatch(EDITING_SONG(false));
     } else {
-      dispatch(updateSong(selectedSong));
+      var formdata = new FormData();
+      formdata.append("title", selectedSong.title);
+      formdata.append("artist", selectedSong.artist);
+      formdata.append("album", selectedSong.album);
+      formdata.append("genre", selectedSong.genre);
+      formdata.append("file", photo);
+      const action = [formdata, selectedSong._id];
 
-      dispatch(editingSong(false));
+      console.log("selceted", action);
+      // console.log(formdata);
+      dispatch(UPDATE_SONG(action));
+
+      dispatch(EDITING_SONG(false));
     }
   }
 
@@ -29,92 +41,82 @@ const UpdateSong = () => {
     <form onSubmit={handleFormSubmit}>
       <h5>Update Song</h5>
       <div className="row">
-        <div className="three columns">
-          <label>Title</label>
-        </div>
-        <div className="nine columns">
-          <input
-            className="u-full-width"
-            type="text"
+        <Box width={2 / 2} px={2}>
+          <Label htmlFor="title">Title</Label>
+          <Input
+            id="title"
             name="title"
+            type="text"
             defaultValue={selectedSong.title}
             onChange={handleChange}
           />
-        </div>
+        </Box>
       </div>
       <div className="row">
-        <div className="three columns">
-          <label>Artist</label>
-        </div>
-        <div className="nine columns">
-          <input
-            className="u-full-width"
-            type="text"
+        <Box width={2 / 2} px={2}>
+          <Label htmlFor="title">Artist</Label>
+          <Input
+            id="artist"
             name="artist"
+            type="text"
             defaultValue={selectedSong.artist}
             onChange={handleChange}
           />
-        </div>
+        </Box>
       </div>
       <div className="row">
-        <div className="three columns">
-          <label>Album</label>
-        </div>
-        <div className="nine columns">
-          <input
-            className="u-full-width"
-            type="text"
+        <Box width={2 / 2} px={2}>
+          <Label htmlFor="title">Album</Label>
+          <Input
+            id="album"
             name="album"
+            type="text"
             defaultValue={selectedSong.album}
             onChange={handleChange}
           />
-        </div>
+        </Box>
       </div>
       <div className="row">
-        <div className="three columns">
-          <label>Genre</label>
-        </div>
-        <div className="nine columns">
-          <input
-            className="u-full-width"
-            type="text"
+        <Box width={2 / 2} px={2}>
+          <Label htmlFor="title">Genre</Label>
+          <Input
+            id="genre"
             name="genre"
+            type="text"
             defaultValue={selectedSong.genre}
             onChange={handleChange}
           />
-        </div>
+        </Box>
       </div>
       <div className="row">
-        <div className="three columns">
-          <label>IMG URL</label>
-        </div>
-        <div className="nine columns">
-          <input
-            className="u-full-width"
-            type="text"
-            name="imageUrl"
-            defaultValue={selectedSong.imageUrl}
-            onChange={handleChange}
+        <Box width={2 / 2} px={2}>
+          <Label htmlFor="title">Photo</Label>
+          <Input
+            id="photo"
+            name="photo"
+            type="file"
+            onChange={(e) => {
+              setPhoto(e.target.files[0]);
+            }}
           />
-        </div>
+        </Box>
       </div>
       <div className="row">
         <div className="three columns">
           <p></p>
         </div>
-        <div className="nine columns">
-          <div className="row">
-            <div className="six columns">
-              <button className="button add-btn" name="cancel" type="submit">
-                CANCEL
-              </button>
-            </div>
-            <div className="six columns">
-              <button className="button-primary add-btn" type="submit">
-                SAVE
-              </button>
-            </div>
-          </div>
+        <div className="col">
+          <button
+            className="button-secondary add-btn"
+            name="cancel"
+            type="submit"
+          >
+            CANCEL
+          </button>
+
+          <Button className="button-primary add-btn" type="submit">
+            SAVE
+          </Button>
         </div>
       </div>
     </form>

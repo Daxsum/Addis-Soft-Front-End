@@ -4,13 +4,13 @@ import { SongCard } from "..";
 import { useSelector } from "react-redux";
 
 const SongList = () => {
-  const songs = useSelector((state) => state.song.songList);
+  const songs = useSelector((state) => state.songList);
 
   return (
     <>
       {songs.length > 0 ? (
         songs.map((song) => {
-          return <SongCard song={song} key={song.id} />;
+          return <SongCard song={song} key={song._id} />;
         })
       ) : (
         <div className="row" key="0">

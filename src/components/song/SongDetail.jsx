@@ -3,25 +3,28 @@ import { useSelector } from "react-redux";
 import "./SongDetail.css";
 
 const SongDetail = (props) => {
-  const songId = props.match.params.id;
-  const songs = useSelector((state) => state.song.songList);
-  const [song] = songs.filter((song) => song.id === songId);
+  const songId = props.match.params._id;
+  const songs = useSelector((state) => state.songList);
+  const song = songs.filter((song) => song._id === songId);
 
   return (
     <>
       <div className="five columns image-side">
         <div className="detail-song-card">
           <div className="detail-image">
-            <img src={song.imageUrl} alt={song.name} />
+            <img
+              src={`${process.env.REACT_APP_BASE_URL}/${song.filePath}`}
+              alt={song.title}
+            />
           </div>
           <div className="detail-song-rating">
-            <p>{song.rating}</p>
+            <p>{song.artist}</p>
           </div>
         </div>
       </div>
       <div className="seven columns content-side">
-        <h5 className="detail-song-name">{song.name}</h5>
-        <p className="detail-song-desc">{song.overview}</p>
+        <h5 className="detail-song-name">{song.title}</h5>
+        <p className="detail-song-desc">{song.album}</p>
       </div>
     </>
   );

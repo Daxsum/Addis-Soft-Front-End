@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { AddSong, SongsTable, UpdateSong } from "../../components";
 
 const ControlPanel = () => {
-  const editing = useSelector((state) => state.song.editing);
+  const editing = useSelector((state) => state.editing);
   return (
     <div className="row">
       <div className="five columns">

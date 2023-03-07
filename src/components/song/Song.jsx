@@ -3,7 +3,7 @@ import { SongList, SongListFiltered } from "..";
 import { useSelector } from "react-redux";
 
 const Song = () => {
-  const searching = useSelector((state) => state.song.searching);
+  const searching = useSelector((state) => state.searching);
 
   return searching ? <SongListFiltered /> : <SongList />;
 };
